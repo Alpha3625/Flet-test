@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import styles from './PostsList.module.css';
 import { PostItem } from '../post-item/PostItem';
 
 export const PostsList = () => {
@@ -7,6 +6,7 @@ export const PostsList = () => {
     const [posts, setPosts] = useState<IPost[]>([]);
     const [comments, setComments] = useState<IComment[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [expandPost, setExpandPost] = useState<Record<number, boolean>>({});
 
     const fetchApi = async () => {
         const urls = ['users', 'posts', 'comments'];
@@ -29,13 +29,29 @@ export const PostsList = () => {
         fetchApi();
     }, []);
 
+    const toggleComments = (postId: number) => {
+        setExpandPost((prev) => ({
+            ...prev,
+            [postId]: !prev[postId],
+        }));
+    };
+
     if (isLoading) return <p>Loading...</p>;
 
     return (
-        <ul className={styles.list}>
-            {posts.map(post => (
-                <PostItem key={post.id} post={post} users={users} comments={comments} />
-            ))}
+        <ul>
+            {posts.map(post => {
+                const user = users.find(u => u.id === post.userId);
+                return (
+                    <PostItem
+                        key={post.id}
+                        user={user}
+                        post={post}
+                        comments={comments}
+                        expandPost={expandPost}
+                        toggleComments={toggleComments} />
+                );
+            })}
         </ul>
     );
 };
