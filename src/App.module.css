@@ -1,0 +1,15 @@
+.App {
+    padding: 100px 0;
+}
+
+.AppContainer {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.AppTitle {
+    text-align: center;
+    margin-bottom: 30px;
+}
